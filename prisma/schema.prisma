@@ -14,14 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        BigInt   @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([name])
-}
 
 // Necessary for Next auth
 model Account {
@@ -58,6 +50,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    ingredients   String
 }
 
 model VerificationToken {
