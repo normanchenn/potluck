@@ -6,20 +6,30 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 
-export const exampleRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
+export const router = createTRPCRouter({
+  getUser: publicProcedure.query(({ ctx }) => {
+      return ctx.session?.user;
     }),
 
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.example.findMany();
   }),
 
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
+  getIngredients: protectedProcedure
+  .query(({ ctx }) => {
+    return ctx.db.user.findUnique({
+      where: {
+        id: ctx.session.user.id
+      }
+    })
+  }),
+
+  updateIngredients: protectedProcedure
+  .query(({ ctx }) => {
+    return ctx.db.user.findUnique({
+      where: {
+        id: ctx.session.user.id
+      }
+    })
   }),
 });
