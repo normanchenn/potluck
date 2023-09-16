@@ -29,7 +29,6 @@ export const router = createTRPCRouter({
   updateIngredients: protectedProcedure
     .input(z.object({ ingredients: z.string() }))
     .query(({ ctx, input: { ingredients } }) => {
-      ctx.db.user.update
       return ctx.db.user.update({
         where: {
           id: ctx.session.user.id
