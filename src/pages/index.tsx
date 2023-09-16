@@ -1,6 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import { Button } from "~/components/ui/button";
 
 import { api } from "~/utils/api";
 
@@ -30,6 +31,7 @@ export default function Home() {
                 Just the basics - Everything you need to know to set up your
                 database and authentication.
               </div>
+              <Button>hi there</Button>
             </Link>
             <Link
               className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
