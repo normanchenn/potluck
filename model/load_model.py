@@ -9,8 +9,10 @@ MODEL_PATH = '../runs/classify/train14/weights/best.pt'
 IMAGE_PATH = '/Users/normanchen/Desktop/food.jpeg'
 MODEL = YOLO(MODEL_PATH)
 RESULTS = MODEL(IMAGE_PATH)
+image = cv2.imread(IMAGE_PATH)
+grid_sizes = [(1, 1), (2, 2), (3, 3)]
 
-def get_prob(result):
+def get_prob(results):
   class_map = results[0].names
   top_5_names = results[0].probs.top5
   top_5_classes = [class_map[i] for i in top_5_names]
@@ -21,8 +23,6 @@ def get_prob(result):
   print(top_5_prob)
   return top_5_foods, top_5_prob_rounded
 
-image = cv2.imread(IMAGE_PATH)
-grid_sizes = [(1, 1), (2, 2), (3, 3)]
 
 def get_subimages(image, grid_size):
   ret = []
@@ -33,30 +33,29 @@ def get_subimages(image, grid_size):
       ret.append(sub_image)
   return ret
 
-predictions = []
-for size in grid_sizes:
-  subimages = get_subimages(image, size)
-  grid_predictions = []
-  for subimage in subimages:
-    temp = "temp.jpg"
-    cv2.imwrite(temp, subimage)
-    results = MODEL(temp)
-    top_foods, top_prob = get_prob(results)
-    grid_predictions.append((top_foods, top_prob))
-    # temp.unlink()
-    os.remove(temp)
-  predictions.append(grid_predictions)
+def get_averages(grid_sizes, image, MODEL=MODEL):
+  predictions = []
+  for size in grid_sizes:
+    subimages = get_subimages(image, size)
+    grid_predictions = []
+    for subimage in subimages:
+      temp = "temp.jpg"
+      cv2.imwrite(temp, subimage)
+      results = MODEL(temp)
+      top_foods, top_prob = get_prob(results)
+      grid_predictions.append((top_foods, top_prob))
+      # temp.unlink()
+      os.remove(temp)
+    predictions.append(grid_predictions)
 
-# print(predictions[4])
-# print(len(predictions))
-# print(len(predictions[4]))
-# print(predictions[4][0])
+  item_scores = defaultdict(list)
+  for sublist in predictions:
+    for subsublist in sublist:
+      for item, score in zip(subsublist[0], subsublist[1]):
+        item_scores[item].append(score)
+        
+  sorted_items = sorted(item_scores.keys(), key=lambda x: sum(item_scores[x])/len(item_scores[x]), reverse=True)
+  print(sorted_items)
+  return sorted_items
 
-item_scores = defaultdict(list)
-for sublist in predictions:
-  for subsublist in sublist:
-    for item, score in zip(subsublist[0], subsublist[1]):
-      item_scores[item].append(score)
-      
-sorted_items = sorted(item_scores.keys(), key=lambda x: sum(item_scores[x])/len(item_scores[x]), reverse=True)
-print(sorted_items)
+get_averages(grid_sizes, image)
