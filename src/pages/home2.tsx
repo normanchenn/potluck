@@ -1,3 +1,5 @@
+import { User } from "@prisma/client";
+import { useSession } from "next-auth/react";
 import { ChangeEventHandler, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -5,33 +7,38 @@ import { Input } from "~/components/ui/input";
 import { api } from "~/utils/api";
 
 export default function home() {
-  const [myfile, setFile] = useState<File | undefined | null>();
-  const update = { ingredients: "" }
-  const { refetch: store } = api.example.updateIngredients.useQuery(update, { enabled: false })
+  const me = api.example.getIngredients.useQuery({})
+  // const [peer, setPeer] = useState<User | null>()
 
-  const onSelectFile: ChangeEventHandler<HTMLInputElement> = async (e) => {
-    setFile(e.target.files ? e.target.files[0] : null);
+  const peer: User = {
+    id: "9c80ae98-fe3a-4020-864a-e39024ed5bfe",
+    name: "Gordon Ramsay",
+    image: "https://yt3.googleusercontent.com/bFpwiiOB_NLCVsIcVQ9UcwBjb1RzipnMmtNfLSWpeIaHboyGkBCq4KBitmovRbStk9WvIWIZOyo=s900-c-k-c0x00ffffff-no-rj",
+    ingredients: JSON.stringify([
+      "lamb sauce",
+      "beef",
+      "rice",
+      "salt",
+      "green pepper"
+    ])
   }
 
-  const predict = async () => {
-    if (!myfile) {
-      return
-    }
+  // const { data } = api.example.getAllUsers.useQuery()
+  // console.log("DATA", data)
+  // if (data) {
+  //   let r;
+  //   do {
+  //     const randIdx = Math.floor(Math.random() * (data?.length ?? 0))
+  //     r = data[randIdx]
+  //   } while (r?.id === session.data?.user.id)
+  //   setPeer(r)
+  // }
 
-    var formData = new FormData();
-    formData.append("file", myfile)
-    const result = await fetch("http://localhost:8000/predict/", {
-      method: 'POST',
-      body: formData
-    })
-
-    let prediction = await result.json()
-    update.ingredients = JSON.stringify(prediction.ingredients)
-    await store()
-  }
+  const allIngredients = (peer?.ingredients && me.data?.ingredients) ? JSON.parse(me.data?.ingredients ?? "[]").concat(JSON.parse(peer.ingredients)) : [];
+  let r = api.example.getRecipes.useQuery({ ingredients: allIngredients })
+  const recipes: string[] = r.data?.generations[0].text.split(", ")
 
   return <>
-    <Input type="file" onChange={onSelectFile} />
-    <Button onClick={predict}>My Button</Button>
+    {recipes}
   </>;
 }

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { z } from "zod";
 
 import {
@@ -36,4 +37,23 @@ export const router = createTRPCRouter({
         data: { ingredients }
       })
     }),
+
+  getRecipes: protectedProcedure
+    .input(z.object({ ingredients: z.array(z.string()) }))
+    .query(async ({ input: { ingredients } }) => {
+      if (ingredients.length === 0) {
+        return null;
+      }
+      let response = await axios.post('https://api.cohere.ai/v1/generate', {
+        "max_tokens": 100,
+        "prompt": `What kind of recipes can you create with: \`${ingredients.join(', ')}\`? Respond with a parseable comma separated list of recipe names with NO extra explanation. Make sure I have all the ingredients for these recipes. An example would be: Fried Rice, Omelette, Grilled Cheese Sandwich, Sushi RECIPE NAMES ONLY`,
+        "temperature": 5
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.COHERE_BEARER}`
+        }
+      })
+      return response.data;
+    })
 });
