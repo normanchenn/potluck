@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from ultralytics import YOLO
 import tempfile
 import os
@@ -11,6 +12,18 @@ app = FastAPI()
 # # IMAGE_PATH = '/Users/normanchen/Desktop/food.jpeg'
 # MODEL = YOLO(MODEL_PATH)
 
+origins = [
+    "http://localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -18,6 +31,7 @@ async def root():
 @app.post("/predict/")
 async def predict(file: UploadFile):
   fd, name = tempfile.mkstemp(suffix=file.filename)
+  print(file.size)
   os.write(fd, file.file.read())
   items = get_good(image=name)
   print(items)
