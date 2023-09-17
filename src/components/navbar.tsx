@@ -1,10 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-
+import { useSession } from "next-auth/react";
 const Navbar: React.FC = () => {
+  const session = useSession();
+  const image = session.data?.user.image;
   return (
-    <nav className="navbar flex justify-between">
+    <nav className=" flex justify-between">
       <Link href="/" className="ml-1">
         <Image
           src="/logo.png"
@@ -14,7 +16,7 @@ const Navbar: React.FC = () => {
         />
       </Link>
       <Avatar className="mr-5 mt-1">
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+        <AvatarImage src={image} alt="@shadcn" />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
     </nav>

@@ -6,18 +6,24 @@ import logo from "public/logo.png";
 import Image from "next/image";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
   const { data: sessionData } = useSession();
+  const session = useSession();
 
   const customSignIn = async () => {
     await signIn(); // Perform sign in
 
+    router.push("/home"); // Redirect to /home if signed in
+  };
+
+  useEffect(() => {
     if (sessionData) {
       router.push("/home"); // Redirect to /home if signed in
     }
-  };
+  }, [sessionData]);
 
   function AuthShowcase() {
     const { data: sessionData } = useSession();

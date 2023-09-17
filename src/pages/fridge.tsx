@@ -30,13 +30,11 @@ export default function home() {
   return (
     <div>
       <Navbar />
-      <div className=" flex h-screen min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#FCD19C] to-[#FCD19C] ">
+      <div className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#FCD19C] to-[#FCD19C] ">
         <Card className="mb-10 mt-10 w-[350px]">
           <CardHeader>
-            <CardTitle>What's Cooking?</CardTitle>
-            <CardDescription>
-              Find your next great potluck with a click.
-            </CardDescription>
+            <CardTitle>Is your Fridge running?</CardTitle>
+            <CardDescription>Better go catch it.</CardDescription>
           </CardHeader>
           <CardContent>
             <form>
