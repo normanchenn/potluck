@@ -24,9 +24,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { User } from "@prisma/client";
 
 export default function home() {
-  const session = useSession();
   // const user = api.example.getIngredients.useQuery({ id: session.data?.user.id });
-  const user = api.example.getIngredients.useQuery({});
   const me = api.example.getIngredients.useQuery({});
 
   const peer: User = {
@@ -41,19 +39,19 @@ export default function home() {
       "salt",
       "green pepper",
     ]),
+    email: null,
+    emailVerified: null
   };
-  // console.log(me);
+
   const allIngredients =
     peer?.ingredients && me.data?.ingredients
       ? JSON.parse(me.data?.ingredients ?? "[]").concat(
           JSON.parse(peer.ingredients),
         )
       : [];
-  let r = api.example.getRecipes.useQuery({ ingredients: allIngredients });
+  const r = api.example.getRecipes.useQuery({ ingredients: allIngredients });
   const recipes: string[] = r.data?.generations[0].text.split(", ");
-  const recipe = recipes?.length > 0 ? recipes[0] : "nothing";
-
-  console.log("USER", user.data);
+  const recipe = recipes?.length > 0 ? recipes[0] : null;
 
   return (
     <div>
@@ -78,10 +76,10 @@ export default function home() {
                     </Avatar>
                     <div>
                       <CardTitle>It's a Match!</CardTitle>
-                      <Label htmlFor="name">{recipe} with Chef Ramsay</Label>
+                      <Label htmlFor="name">{!r.isLoading ? `${recipe ?? 'nothing'} with Chef Ramsay` : 'Loading...'}</Label>
                     </div>
                   </div>
-                  <RecipeImageGenerator word={recipe} />
+                  {!r.isLoading && <RecipeImageGenerator word={recipe} />}
                 </div>
               </div>
             </form>
