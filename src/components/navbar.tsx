@@ -15,6 +15,7 @@ const Navbar: React.FC = () => {
           alt="Picture of the author"
         />
       </Link>
+      <h3 className="text-4xl	 font-extrabold text-[#AA825D]">potluck</h3>
       <Avatar className="mr-5 mt-1">
         <AvatarImage src={image} alt="@shadcn" />
         <AvatarFallback>CN</AvatarFallback>

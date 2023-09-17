@@ -53,7 +53,7 @@ export default function home() {
                       <Label htmlFor="name">{recipe} with Chef Ramsay</Label>
                     </div>
                   </div>
-                  {/* <RecipeImageGenerator word={recipe} /> */}
+                  <RecipeImageGenerator word={recipe} />
                 </div>
               </div>
             </form>
