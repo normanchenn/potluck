@@ -42,6 +42,7 @@ export default function home() {
       "green pepper",
     ]),
   };
+  // console.log(me);
   const allIngredients =
     peer?.ingredients && me.data?.ingredients
       ? JSON.parse(me.data?.ingredients ?? "[]").concat(
@@ -57,7 +58,7 @@ export default function home() {
   return (
     <div>
       <Navbar />
-      {JSON.stringify(r)}
+      {/* {JSON.stringify(r)} */}
       <div className=" flex h-screen min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#FCD19C] to-[#FCD19C] ">
         <Card className="mb-10 mt-10 w-[350px]">
           <CardHeader>
