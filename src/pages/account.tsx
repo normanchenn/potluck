@@ -55,19 +55,19 @@ export default function home() {
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="name">Location</Label>
-                  <Input id="name" placeholder="Enter your Location" />
+                  <Input id="name" placeholder="Waterloo, ON" disabled/>
                 </div>
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="framework">Bio</Label>
+                  <Label htmlFor="framework">Cuisine Preference</Label>
                   <Select>
                     <SelectTrigger id="framework">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent position="popper">
-                      <SelectItem value="next">Next.js</SelectItem>
-                      <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                      <SelectItem value="astro">Astro</SelectItem>
-                      <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                      <SelectItem value="next">Asian</SelectItem>
+                      <SelectItem value="sveltekit">American</SelectItem>
+                      <SelectItem value="astro">Italian</SelectItem>
+                      <SelectItem value="nuxt">Other</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -78,7 +78,7 @@ export default function home() {
             <Button variant="outline" onClick={handleSignOut}>
               Sign Out
             </Button>
-            <Button>Deploy</Button>
+            <Button>Save</Button>
           </CardFooter>
         </Card>
         <BottomNav />

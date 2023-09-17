@@ -20,14 +20,39 @@ import {
 import { api } from "~/utils/api";
 import Navbar from "../components/navbar";
 import BottomNav from "../components/bottomNav";
-import { useEffect } from "react";
+import { useState, useEffect, ChangeEventHandler } from "react";
+import Image from "next/image"
 
-export default function home() {
+export default function Home() {
   const session = useSession();
   // const user = api.example.getIngredients.useQuery({ id: session.data?.user.id });
   const user = api.example.getIngredients.useQuery({});
   // const user = api.example.getIngredients.useQuery();
   // console.log("USER", user.data);
+  const update = { ingredients: "" }
+  const { refetch: store } = api.example.updateIngredients.useQuery(update, { enabled: false })
+  const [myfile, setFile] = useState<File | undefined | null>();
+  const onSelectFile: ChangeEventHandler<HTMLInputElement> = async (e) => {
+    setFile(e.target.files ? e.target.files[0] : null);
+  }
+
+  const predict = async () => {
+    if (!myfile) {
+      return
+    }
+
+    var formData = new FormData();
+    formData.append("file", myfile)
+    const result = await fetch("http://localhost:8000/predict/", {
+      method: 'POST',
+      body: formData
+    })
+
+    let prediction = await result.json()
+    update.ingredients = JSON.stringify(prediction.ingredients)
+    await store()
+  }
+
 
   return (
     <div>
@@ -61,12 +86,15 @@ export default function home() {
                 </div> */}
               </div>
             </form>
+            {/* <Image src={URL.createObjectURL(myfile)} alt="Image" className="w-1/2 rounded-md object-cover" /> */}
+            {
+              myfile && <img src={URL.createObjectURL(myfile)} className="px-8 rounded-md object-cover"/>
+            }
           </CardContent>
+          
           <CardFooter className="flex justify-between">
-            {/* <Button variant="outline">Edit</Button> */}
-            <Button className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-              <input type="file" title="Add Photo" className=""/>
-            </Button>
+            <Input type="file" onChange={onSelectFile}/>
+            <Button onClick={predict}>Add</Button>
           </CardFooter>
         </Card>
         <BottomNav />
