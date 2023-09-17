@@ -1,6 +1,5 @@
 import { useSession } from "next-auth/react";
 import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
 import {
   Card,
   CardContent,
@@ -43,7 +42,7 @@ export default function home() {
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="name">Name</Label>
-                  <Input id="name" placeholder="Name of your project" />
+                  {/* <img className="h-48 w-96 object-contain" /> */}
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="framework">Framework</Label>
