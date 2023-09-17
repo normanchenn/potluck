@@ -11,7 +11,7 @@ const RecipeImageGenerator: React.FC<RecipeImageGeneratorProps> = ({
 
   useEffect(() => {
     fetch(
-      `https://api.unsplash.com/photos/random?query=${word}&client_id=DEPgnh_Dr3_RqOWiJib5ewAtaXZuXiQcfqKlrkTEOYY`,
+      `https://api.unsplash.com/photos/random?query=${word}&client_id=3_0mEiGMOa6_w4W40iyvLNnSNUeTpj3Rvuy0Mq6zsqU`,
     )
       .then((response) => response.json())
       .then((data) => {
