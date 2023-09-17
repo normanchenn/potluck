@@ -1,8 +1,37 @@
 import { useSession } from "next-auth/react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "~/components/ui/navigation-menu";
+import { navigationMenuTriggerStyle } from "~/components/ui/navigation-menu";
 
+import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import { Label } from "~/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { api } from "~/utils/api";
+import Navbar from "../components/navbar";
 
 export default function home() {
   const session = useSession();
@@ -10,12 +39,72 @@ export default function home() {
   const user = api.example.getIngredients.useQuery();
   console.log("USER", user.data);
 
-  // console.log(session.data?.user.id)
-  const myFunc = () => {
-    console.log("hi there");
-  }
-  return <>
-    <Input />
-    <Button onClick={myFunc}>My Button</Button>
-  </>;
+  return (
+    <div>
+      <Navbar />
+      <div className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#FCD19C] to-[#FCD19C]">
+        <Card className="mb-10 mt-10 w-[350px]">
+          <CardHeader>
+            <CardTitle>Create project</CardTitle>
+            <CardDescription>
+              Deploy your new project in one-click.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form>
+              <div className="grid w-full items-center gap-4">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="name">Name</Label>
+                  <Input id="name" placeholder="Name of your project" />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="framework">Framework</Label>
+                  <Select>
+                    <SelectTrigger id="framework">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent position="popper">
+                      <SelectItem value="next">Next.js</SelectItem>
+                      <SelectItem value="sveltekit">SvelteKit</SelectItem>
+                      <SelectItem value="astro">Astro</SelectItem>
+                      <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </form>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <Button variant="outline">Cancel</Button>
+            <Button>Deploy</Button>
+          </CardFooter>
+        </Card>
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link href="/docs" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Find a Potluck
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/docs" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  What's In My Fridge?
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/docs" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Account
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
+    </div>
+  );
 }
