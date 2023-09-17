@@ -19,12 +19,6 @@ export default function Home() {
     router.push("/home"); // Redirect to /home if signed in
   };
 
-  useEffect(() => {
-    if (sessionData) {
-      router.push("/home"); // Redirect to /home if signed in
-    }
-  }, [sessionData]);
-
   function AuthShowcase() {
     const { data: sessionData } = useSession();
 
@@ -33,20 +27,46 @@ export default function Home() {
       { enabled: sessionData?.user !== undefined },
     );
 
-    return (
-      <div className="flex flex-col items-center justify-center gap-4">
-        <p className="text-center text-2xl text-white">
-          {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-          {secretMessage && <span> - {secretMessage}</span>}
-        </p>
-        <button
-          className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-          onClick={sessionData ? () => void signOut() : customSignIn} // Use customSignIn function
-        >
-          {sessionData ? "Sign out" : "Sign in"}
-        </button>
-      </div>
-    );
+    if (sessionData) {
+      return (
+        <div className="flex flex-col items-center justify-center gap-4">
+          <p className="text-center text-2xl text-white">
+            {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+            {secretMessage && <span> - {secretMessage}</span>}
+          </p>
+
+          <button
+            className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+            onClick={sessionData ? () => router.push("/home") : undefined} // Use customSignIn function
+          >
+            {sessionData ? "Start Cooking!" : ""}
+          </button>
+
+          <button
+            className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+            onClick={sessionData ? () => void signOut() : customSignIn} // Use customSignIn function
+          >
+            {sessionData ? "Sign out" : "Sign in"}
+          </button>
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex flex-col items-center justify-center gap-4">
+          <p className="text-center text-2xl text-white">
+            {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+            {secretMessage && <span> - {secretMessage}</span>}
+          </p>
+
+          <button
+            className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+            onClick={sessionData ? () => void signOut() : customSignIn} // Use customSignIn function
+          >
+            {sessionData ? "Sign out" : "Sign in"}
+          </button>
+        </div>
+      );
+    }
   }
 
   return (

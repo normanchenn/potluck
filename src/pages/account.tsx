@@ -1,6 +1,6 @@
-import { useSession } from "next-auth/react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { signIn, signOut, useSession } from "next-auth/react";
 import {
   Card,
   CardContent,
@@ -20,12 +20,26 @@ import {
 import { api } from "~/utils/api";
 import Navbar from "../components/navbar";
 import BottomNav from "../components/bottomNav";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function home() {
+  const router = useRouter();
+
   const session = useSession();
   // const user = api.example.getIngredients.useQuery({ id: session.data?.user.id });
   const user = api.example.getIngredients.useQuery();
   console.log("USER", user.data);
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
+  useEffect(() => {
+    if (!session.data?.user) {
+      router.push("/");
+    }
+  }, [session.data?.user]);
 
   return (
     <div>
@@ -61,7 +75,9 @@ export default function home() {
             </form>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" onClick={handleSignOut}>
+              Sign Out
+            </Button>
             <Button>Deploy</Button>
           </CardFooter>
         </Card>
