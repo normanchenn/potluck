@@ -21,16 +21,43 @@ import Navbar from "../components/navbar";
 import BottomNav from "../components/bottomNav";
 import RecipeImageGenerator from "../components/recipeImageGenerator";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { User } from "@prisma/client";
+
 export default function home() {
   const session = useSession();
   // const user = api.example.getIngredients.useQuery({ id: session.data?.user.id });
   const user = api.example.getIngredients.useQuery({});
-  const recipe = "Pizza";
+  const me = api.example.getIngredients.useQuery({});
+
+  const peer: User = {
+    id: "9c80ae98-fe3a-4020-864a-e39024ed5bfe",
+    name: "Gordon Ramsay",
+    image:
+      "https://yt3.googleusercontent.com/bFpwiiOB_NLCVsIcVQ9UcwBjb1RzipnMmtNfLSWpeIaHboyGkBCq4KBitmovRbStk9WvIWIZOyo=s900-c-k-c0x00ffffff-no-rj",
+    ingredients: JSON.stringify([
+      "lamb sauce",
+      "beef",
+      "rice",
+      "salt",
+      "green pepper",
+    ]),
+  };
+  const allIngredients =
+    peer?.ingredients && me.data?.ingredients
+      ? JSON.parse(me.data?.ingredients ?? "[]").concat(
+          JSON.parse(peer.ingredients),
+        )
+      : [];
+  let r = api.example.getRecipes.useQuery({ ingredients: allIngredients });
+  const recipes: string[] = r.data?.generations[0].text.split(", ");
+  const recipe = recipes?.length > 0 ? recipes[0] : "nothing";
+
   console.log("USER", user.data);
 
   return (
     <div>
       <Navbar />
+      {JSON.stringify(r)}
       <div className=" flex h-screen min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#FCD19C] to-[#FCD19C] ">
         <Card className="mb-10 mt-10 w-[350px]">
           <CardHeader>

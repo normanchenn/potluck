@@ -37,7 +37,7 @@ export default function Home() {
 
           <button
             className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-            onClick={sessionData ? () => router.push("/home") : undefined} // Use customSignIn function
+            onClick={sessionData ? () => router.push("/fridge") : undefined} // Use customSignIn function
           >
             {sessionData ? "Start Cooking!" : ""}
           </button>
