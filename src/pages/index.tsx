@@ -28,9 +28,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 gap-4"></div>
           <div className="flex flex-col items-center gap-2">
-            <Link href="home">
-              <Button>Sign In</Button>
-            </Link>
+            <AuthShowcase />
           </div>
         </div>
       </main>
