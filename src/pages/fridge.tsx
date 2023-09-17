@@ -21,7 +21,9 @@ import { api } from "~/utils/api";
 import Navbar from "../components/navbar";
 import BottomNav from "../components/bottomNav";
 import { useState, useEffect, ChangeEventHandler } from "react";
-import Image from "next/image";
+import Image from "next/image"
+import { Badge } from "~/components/ui/badge"
+
 
 export default function Home() {
   const session = useSession();
@@ -36,7 +38,8 @@ export default function Home() {
   const [myfile, setFile] = useState<File | undefined | null>();
   const onSelectFile: ChangeEventHandler<HTMLInputElement> = async (e) => {
     setFile(e.target.files ? e.target.files[0] : null);
-  };
+  }
+  const [ingr, setIngr] = useState("")
 
   const predict = async () => {
     if (!myfile) {
@@ -46,14 +49,25 @@ export default function Home() {
     var formData = new FormData();
     formData.append("file", myfile);
     const result = await fetch("http://localhost:8000/predict/", {
-      method: "POST",
-      body: formData,
-    });
+      method: 'POST',
+      body: formData
+    })
 
-    let prediction = await result.json();
-    update.ingredients = JSON.stringify(prediction.ingredients);
-    await store();
-  };
+    let prediction = await result.json()
+    setIngr(JSON.stringify(prediction.ingredients))
+    update.ingredients = JSON.stringify(prediction.ingredients)
+    await store()
+  }
+
+  function formatString(str) {
+    return str
+      .replace(/-/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, function(match) {
+        return match.toUpperCase();
+      });
+  }
+
 
   return (
     <div>
@@ -67,18 +81,37 @@ export default function Home() {
           <CardContent>
             <form>
               <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
+                {/* <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="name">Your Ingredients</Label>
                   <Input id="name" placeholder={user?.ingredients} />
-                </div>
+                </div> */}
+                {/* <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="framework">Framework</Label>
+                  <Select>
+                    <SelectTrigger id="framework">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent position="popper">
+                      <SelectItem value="next">Next.js</SelectItem>
+                      <SelectItem value="sveltekit">SvelteKit</SelectItem>
+                      <SelectItem value="astro">Astro</SelectItem>
+                      <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div> */}
               </div>
             </form>
-            {myfile && (
-              <img
-                src={URL.createObjectURL(myfile)}
-                className="rounded-md object-cover px-8"
-              />
-            )}
+            {/* <Image src={URL.createObjectURL(myfile)} alt="Image" className="w-1/2 rounded-md object-cover" /> */}
+            {
+              myfile && <img src={URL.createObjectURL(myfile)} className="px-8 rounded-md object-cover"/>
+            }
+            {
+              ingr && <div>
+                {
+                  JSON.parse(ingr).map((item) => <Badge className="m-1">{formatString(item)}</Badge>)
+                }
+              </div>
+            }
           </CardContent>
 
           <CardFooter className="flex justify-between">
