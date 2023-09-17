@@ -20,12 +20,12 @@ import { api } from "~/utils/api";
 import Navbar from "../components/navbar";
 import BottomNav from "../components/bottomNav";
 import RecipeImageGenerator from "../components/recipeImageGenerator";
-
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 export default function home() {
   const session = useSession();
   // const user = api.example.getIngredients.useQuery({ id: session.data?.user.id });
   const user = api.example.getIngredients.useQuery({});
-  const recipe = "pizza";
+  const recipe = "Pizza";
   console.log("USER", user.data);
 
   return (
@@ -43,8 +43,17 @@ export default function home() {
             <form>
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">{recipe}</Label>
-                  <RecipeImageGenerator word={recipe} />
+                  <div className="flex flex-row">
+                    <Avatar className="mr-5 mt-1">
+                      <AvatarImage src="/gordan.jpg" alt="@shadcn" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <CardTitle>It's a Match!</CardTitle>
+                      <Label htmlFor="name">{recipe} with Chef Ramsay</Label>
+                    </div>
+                  </div>
+                  {/* <RecipeImageGenerator word={recipe} /> */}
                 </div>
               </div>
             </form>
