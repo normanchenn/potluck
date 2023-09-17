@@ -11,7 +11,7 @@ export const router = createTRPCRouter({
     return ctx.session?.user;
   }),
 
-  getAll: publicProcedure.query(({ ctx }) => {
+  getAllUsers: publicProcedure.query(({ ctx }) => {
     return ctx.db.user.findMany();
   }),
 
@@ -20,22 +20,20 @@ export const router = createTRPCRouter({
     .input(z.object({ id: z.optional(z.string()) }))
     .query(({ ctx, input: { id } }) => {
       return ctx.db.user.findUnique({
-        where: {
-          id: id ?? ctx.session.user.id
-        }
+        where: { id: id ?? ctx.session.user.id }
       })
     }),
 
+  // updates the current user id's (or, optionally, the passed user id's) ingredients
   updateIngredients: protectedProcedure
-    .input(z.object({ ingredients: z.string() }))
-    .query(({ ctx, input: { ingredients } }) => {
+    .input(z.object({
+      id: z.optional(z.string()),
+      ingredients: z.string()
+    }))
+    .query(({ ctx, input: { id, ingredients } }) => {
       return ctx.db.user.update({
-        where: {
-          id: ctx.session.user.id
-        },
-        data: {
-          ingredients
-        }
+        where: { id: id ?? ctx.session.user.id },
+        data: { ingredients }
       })
     }),
 });
