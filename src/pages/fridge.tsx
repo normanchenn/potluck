@@ -20,12 +20,14 @@ import {
 import { api } from "~/utils/api";
 import Navbar from "../components/navbar";
 import BottomNav from "../components/bottomNav";
+import { useEffect } from "react";
 
 export default function home() {
   const session = useSession();
   // const user = api.example.getIngredients.useQuery({ id: session.data?.user.id });
-  const user = api.example.getIngredients.useQuery();
-  console.log("USER", user.data);
+  const user = api.example.getIngredients.useQuery({});
+  // const user = api.example.getIngredients.useQuery();
+  // console.log("USER", user.data);
 
   return (
     <div>
@@ -40,10 +42,10 @@ export default function home() {
             <form>
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Name</Label>
-                  <Input id="name" placeholder="Name of your project" />
+                  <Label htmlFor="name">Your Ingredients</Label>
+                  <Input id="name" placeholder={user?.ingredients} />
                 </div>
-                <div className="flex flex-col space-y-1.5">
+                {/* <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="framework">Framework</Label>
                   <Select>
                     <SelectTrigger id="framework">
@@ -56,13 +58,15 @@ export default function home() {
                       <SelectItem value="nuxt">Nuxt.js</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
+                </div> */}
               </div>
             </form>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button variant="outline">Cancel</Button>
-            <Button>Deploy</Button>
+            {/* <Button variant="outline">Edit</Button> */}
+            <Button className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+              <input type="file" title="Add Photo" className=""/>
+            </Button>
           </CardFooter>
         </Card>
         <BottomNav />
