@@ -54,11 +54,11 @@ export default function home() {
             <form>
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Name</Label>
-                  <Input id="name" placeholder="Name of your project" />
+                  <Label htmlFor="name">Location</Label>
+                  <Input id="name" placeholder="Enter your Location" />
                 </div>
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="framework">Framework</Label>
+                  <Label htmlFor="framework">Bio</Label>
                   <Select>
                     <SelectTrigger id="framework">
                       <SelectValue placeholder="Select" />

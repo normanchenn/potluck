@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile
 from ultralytics import YOLO
 import tempfile
 import os
-from load_model import *
+from load_model2 import *
 
 app = FastAPI()
 
@@ -19,6 +19,6 @@ async def root():
 async def predict(file: UploadFile):
   fd, name = tempfile.mkstemp(suffix=file.filename)
   os.write(fd, file.file.read())
-  items = get_mickey(image=name)
+  items = get_good(image=name)
   print(items)
   return {"ingredients": items[0], "confidence": items[1]}

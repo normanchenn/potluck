@@ -44,3 +44,6 @@ yarn-error.log*
 venv
 UECFOOD100
 .DS_Store
+archive
+archive.zip
+archiveold
